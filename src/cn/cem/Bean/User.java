@@ -10,6 +10,7 @@ public class User {
 	private String uid;
 	private String name;
 	private List<String> commentUids;
+	
 	public String getUid() {
 		return uid;
 	}

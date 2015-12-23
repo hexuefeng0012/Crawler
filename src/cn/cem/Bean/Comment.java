@@ -8,8 +8,16 @@ public class Comment {
 	private int id;
 	private String uid;
 	private int weiboId;
-	private String divId;
+	private String wid;
 	private String content;
+	private String weiboUrl;
+	
+	public String getWeiboUrl() {
+		return weiboUrl;
+	}
+	public void setWeiboUrl(String weiboUrl) {
+		this.weiboUrl = weiboUrl;
+	}
 	public int getId() {
 		return id;
 	}
@@ -34,11 +42,11 @@ public class Comment {
 	public void setWeiboId(int weiboId) {
 		this.weiboId = weiboId;
 	}
-	public String getDivId() {
-		return divId;
+	public String getWid() {
+		return wid;
 	}
-	public void setDivId(String divId) {
-		this.divId = divId;
+	public void setWid(String wid) {
+		this.wid = wid;
 	}
 	
 }

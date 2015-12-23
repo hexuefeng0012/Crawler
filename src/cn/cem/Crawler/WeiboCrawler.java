@@ -2,6 +2,7 @@ package cn.cem.Crawler;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -29,7 +30,7 @@ public class WeiboCrawler {
 	public static WebClient client = new WebClient();
 	
 	/**
-	 * 爬取搜索某个关键字的微博
+	 * 对某个微博主题进行爬取
 	 * @param keyword
 	 * @param pageStart
 	 * @param pageEnd
@@ -76,12 +77,9 @@ public class WeiboCrawler {
 				Weibo weibo = new Weibo();
 				User user = new User();
 				Element aRow = rows.get(i);
-//				if (!aRow.hasAttr("id")) {
-//					continue;
-//				}
-//				存入每条微博的id
-				
-				weibo.setDivId(aRow.attr("id"));
+
+//				存入每条微博的id				
+				weibo.setWid(aRow.attr("id"));
 
 //				获取该条微博中的微博用户名以及uid，并存入user数据库
 				Elements nks = aRow.getElementsByClass("nk");
@@ -94,7 +92,7 @@ public class WeiboCrawler {
 				}
 				
 //				开始准备weibo表的数据，首先是uid
-				weibo.setUserId(user.getUid());
+				weibo.setUid(user.getUid());
 				
 //				微博内容
 				Elements ctts = aRow.getElementsByClass("ctt");
@@ -103,6 +101,35 @@ public class WeiboCrawler {
 					weibo.setContent(ctt.text().replaceAll("'", "\'"));
 				}
 				
+//				微博点赞数、转发数、评论数
+				Elements weiboNums=aRow.select("div>a");
+				
+				ArrayList<Integer> list1=new ArrayList<Integer>();
+				
+				for (int j = 0; j < weiboNums.size(); j++) {
+					
+					String href=(weiboNums.get(j)).attr("href");
+					if (href.contains("attitude") ||href.contains("repost") ||href.contains("comment")) {
+						list1.add(j);
+					}
+					
+				}
+				if (list1.size()==4) {
+					list1.remove(0);
+				}
+				
+				Element zanNum=weiboNums.get(list1.get(0));
+				Element zfNum=weiboNums.get(list1.get(1));
+				Element cmtNum=weiboNums.get(list1.get(2));
+				
+				weibo.setZanNum(TextUtil.GetOnlyNum(zanNum.text()));
+				weibo.setZfNum(TextUtil.GetOnlyNum(zfNum.text()));
+				weibo.setCmtNum(TextUtil.GetOnlyNum(cmtNum.text()));
+				
+//				微博评论地址
+				String cmtUrl=cmtNum.attr("href");
+				weibo.setCmtUrl(cmtUrl);
+				
 //				发微博的时间
 				String time = aRow.getElementsByClass("ct").first().text();
 				if (time != null && time != "") {
@@ -110,34 +137,6 @@ public class WeiboCrawler {
 					weibo.setPubTime(pubTime);
 				}
 
-//				转发的理由 <span class="cmt"> &nbsp;转发了&nbsp; <a href="http://weibo.cn/316662703"> 老漫_ </a> &nbsp;的微博: </span>
-//				<span class="cmt"> 赞[605] </span>
-//				<span class="cmt"> 原文转发[1733] </span>
-//				<span class="cmt"> 转发理由: </span>
-				Elements cmts = aRow.getElementsByClass("cmt");
-				if (cmts != null && cmts.size() != 0) {
-					
-//					<a href="http://weibo.cn/316662703"> 老漫_ </a>
-					Elements aTags = cmts.get(0).getElementsByTag("a");
-					Element aUser;
-					if (aTags != null && aTags.size() != 0) {
-						aUser = aTags.get(0);
-						User cmtUser = new User();
-						if (aUser != null) {
-							WeiboUtil.analysisUser(aUser, cmtUser);
-							UserDao.addUser(cmtUser);
-							weibo.setCmtUid(cmtUser.getUid());
-							
-//							原文评论
-							Elements ccs = aRow.getElementsByClass("cc");
-							if (ccs != null && ccs.size() != 0) {
-								Element cc = ccs.get(0);
-								String oriCmtUrl = cc.attr("href");
-								weibo.setOriCmtUrl(oriCmtUrl);
-							}
-						}
-					}
-				}
 				WeiboDao.addWeibo(weibo);
 			}
 		}
@@ -149,7 +148,7 @@ public class WeiboCrawler {
 	 */
 	public static void main(String[] args) {
 		try {
-			crawlSearch("科比",1,10);
+			crawlSearch("科比",1,3);
 		} catch (FailingHttpStatusCodeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

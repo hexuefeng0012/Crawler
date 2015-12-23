@@ -17,7 +17,7 @@ public class CommentDao {
 	public static List<Comment> getComments() {
 		List<Comment>CommentList = new ArrayList<Comment>();
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT `user`.`name`,`comment`.id,`comment`.weiboId,`comment`.content FROM `user` INNER JOIN `comment` ON `user`.uid=`comment`.uid; ");
+		sql.append("SELECT `user`.`name`,`weibo`.cmtUrl,weibo.content,`comment`.content FROM `comment` INNER JOIN `user` ON `comment`.uid=`user`.uid INNER JOIN weibo ON `comment`.weiboId=weibo.id;");
 		DBManager dbm = new DBManager();
 		ResultSet rs = null;	
 		try
@@ -30,8 +30,8 @@ public class CommentDao {
 				{
 					Comment comment = new Comment();
 					comment.setUid(rs.getString(1));
-					comment.setId(rs.getInt(2));
-					comment.setWeiboId(rs.getInt(3));
+					comment.setWeiboUrl(rs.getString(2));
+					comment.setWid(rs.getString(3));
 					comment.setContent(rs.getString(4));
 					CommentList.add(comment);
 				}
@@ -64,7 +64,7 @@ public class CommentDao {
 			.append(", ").append("uid")
 			.append(", ").append("weiboId")
 			.append(", ").append("content")
-			.append(") values('").append(comment.getDivId())
+			.append(") values('").append(comment.getWid())
 			.append("', '").append(comment.getUid())
 			.append("', '").append(comment.getWeiboId())
 			.append("', '").append(comment.getContent())
@@ -88,16 +88,7 @@ public class CommentDao {
 		}
 		return agk;
 	}
-	
-	/**
-	 * 更新访问时间
-	 * @return
-	 */
-	public static boolean updateVisitTime() 
-	{
-		return true;
-	}
-	
+		
 	/**
 	 * 删除所有记录
 	 */

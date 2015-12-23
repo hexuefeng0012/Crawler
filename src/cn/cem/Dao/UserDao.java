@@ -35,4 +35,15 @@ public class UserDao {
 		}
 		return state;
 	}
+	
+	public static void deleteAll() 
+	{
+		StringBuffer sql = new StringBuffer();
+
+		sql.append("delete from user;");
+		DBManager dbm = new DBManager();
+		
+		dbm.deleteByStmt(sql.toString());
+		dbm.close();
+	}
 }

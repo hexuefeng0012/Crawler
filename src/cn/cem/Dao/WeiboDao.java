@@ -26,13 +26,14 @@ public class WeiboDao {
 				{
 					Weibo weibo = new Weibo();
 					weibo.setId(rs.getInt(1));
-					weibo.setDivId(rs.getString(2));
-					weibo.setUserId(rs.getString(3));
-					weibo.setCmtUid(rs.getString(4));
-					weibo.setOriCmtUrl(rs.getString(5));
-					weibo.setContent(rs.getString(6));
-					weibo.setPubTime(rs.getString(7));
-					weibo.setLastVisitTime(rs.getString(8));
+					weibo.setWid(rs.getString(2));
+					weibo.setUid(rs.getString(3));
+					weibo.setZanNum(rs.getString(4));
+					weibo.setZfNum(rs.getString(5));
+					weibo.setCmtNum(rs.getString(6));
+					weibo.setContent(rs.getString(7));
+					weibo.setPubTime(rs.getString(8));
+					weibo.setCmtUrl(rs.getString(9));
 					weiboList.add(weibo);
 				}
 			}
@@ -55,21 +56,26 @@ public class WeiboDao {
 		
 		StringBuffer sql = new StringBuffer();
 		sql.append("insert into ").append("weibo")
-			.append(" (").append("divId")
+			.append(" (").append("wid")
 			.append(", ").append("uid")
-			.append(", ").append("cmtUid")
+			.append(", ").append("zanNum")
+			.append(", ").append("zfNum")
+			.append(", ").append("cmtNum")
 			.append(", ").append("content")
-			.append(", ").append("oriCmtUrl")
-			.append(", ").append("pubtime")
-			.append(") values('").append(weibo.getDivId())
-			.append("', '").append(weibo.getUserId())
-			.append("', '").append(weibo.getCmtUid())
+			.append(", ").append("pubTime")
+			.append(", ").append("cmtUrl")
+			.append(") values('").append(weibo.getWid())
+			.append("', '").append(weibo.getUid())
+			.append("', '").append(weibo.getZanNum())
+			.append("', '").append(weibo.getZfNum())
+			.append("', '").append(weibo.getCmtNum())
 			.append("', '").append(weibo.getContent())
-			.append("', '").append(weibo.getOriCmtUrl())
 			.append("', '").append(weibo.getPubTime())
+			.append("', '").append(weibo.getCmtUrl())
 			.append("');");
 		DBManager dbm = new DBManager();
-		ResultSet rs = null;	
+		ResultSet rs = null;
+		dbm.retrieveByStmt("SET NAMES utf8mb4;" );
 		rs = dbm.insertByStmtAGK(sql.toString());
 		try {
 			if((null!=rs) && rs.next())
@@ -120,7 +126,7 @@ public class WeiboDao {
 	public static List<Weibo> GetResult() {
 		List<Weibo> weiboList = new ArrayList<Weibo>();
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT `user`.`name`,weibo.oriCmtUrl,weibo.pubTime,weibo.content FROM `user` INNER JOIN weibo WHERE weibo.uid=`user`.uid;");
+		sql.append("SELECT `user`.`name`,weibo.cmtUrl,weibo.pubTime,weibo.content,weibo.zanNum,weibo.zfNum,weibo.cmtNum FROM `user` INNER JOIN weibo WHERE weibo.uid=`user`.uid;");
 		DBManager dbm = new DBManager();
 		ResultSet rs = null;	
 		try
@@ -132,10 +138,14 @@ public class WeiboDao {
 				while(rs.next())
 				{
 					Weibo weibo = new Weibo();
-					weibo.setUserId(rs.getString(1));
-					weibo.setOriCmtUrl(rs.getString(2));
-					weibo.setContent(rs.getString(4));
+					
+					weibo.setUid(rs.getString(1));
+					weibo.setCmtUrl(rs.getString(2));
 					weibo.setPubTime(rs.getString(3));
+					weibo.setContent(rs.getString(4));
+					weibo.setZanNum(rs.getString(5));
+					weibo.setZfNum(rs.getString(6));
+					weibo.setCmtNum(rs.getString(7));
 					weiboList.add(weibo);
 				}
 			}
@@ -151,6 +161,5 @@ public class WeiboDao {
 			dbm.close();
 		}
 		return weiboList;
-		
 	}
 }

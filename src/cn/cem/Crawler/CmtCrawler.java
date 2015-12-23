@@ -42,22 +42,18 @@ public class CmtCrawler {
 			MalformedURLException, IOException {
 
 		List<Weibo> weiboList = WeiboDao.getWeibos();
+		
 		for (int i = 0; i < weiboList.size(); i++) {
 			Weibo weibo = weiboList.get(i);
-			if (null == weibo.getLastVisitTime()) {
-//				oricmturl http://weibo.cn/comment/D6GSEAM0B?rl=1#cmtfrm 原文的评论处
-				String oriCmtUrl = weibo.getOriCmtUrl();
-				HtmlPage page;
-				if (oriCmtUrl != null && !oriCmtUrl.equals("null")) {
-					oriCmtUrl = oriCmtUrl.split("\\?")[0];
-					page = client.getPage(oriCmtUrl);
-				} else {
-					String cmtUrl = "http://weibo.cn/comment/"
-							+ weibo.getDivId().substring(2);
-					page = client.getPage(cmtUrl);
-				}
-				collectComment(page, weibo.getId(), weibo.getUserId());
+			String cmtUrl = weibo.getCmtUrl();
+			HtmlPage page;
+			
+			if (cmtUrl !=null && !cmtUrl.equals("null")) {
+				cmtUrl = cmtUrl.split("\\?")[0];
+				page = client.getPage(cmtUrl);
+				collectComment(page, weibo.getId(), weibo.getUid());
 			}
+			
 			WeiboDao.updateVisitTime(weibo.getId(), DateUtil.formatDate(new Date()));
 		}
 	}
@@ -79,7 +75,7 @@ public class CmtCrawler {
 		if (pageUrl.contains("login.weibo.cn")) {
 			WeiboUtil.login("nuaais@sina.cn", "admin123456",client);
 		}
-
+		System.out.println("Comment Page : 1");
 		Document pagedoc = Jsoup.parse(page.asXml());
 		extractComments(pagedoc, weiboId, uid);
 
@@ -87,23 +83,19 @@ public class CmtCrawler {
 		if (pagelist != null) {
 			int i = 2;
 			boolean flag = true;
-			while (flag) {
+			while (true == flag) {
+				
 				System.out.println("Comment Page : " + i);
 				HtmlPage page2 = client.getPage(pageUrl + "?page=" + i);
 				Document pagedoc2 = Jsoup.parse(page2.asXml());
 				extractComments(pagedoc2, weiboId, uid);
-
+	
 				Element pagelist2 = pagedoc2.getElementById("pagelist");
 				if (pagelist2 != null) {
 					Elements aTags = pagelist2.getElementsByTag("a");
-					if (!aTags.first().text().equals("下页")) {
+					if (!aTags.first().text().equals("下页") || i>49) {
 						flag = false;
 					}
-				} else {
-					flag = false;
-				}
-				if (50 == i) {
-					flag = false;
 				}
 				i++;
 			}
@@ -128,7 +120,7 @@ public class CmtCrawler {
 				}
 				Comment comment = new Comment();
 				comment.setWeiboId(weiboId);
-				comment.setDivId(aRow.attr("id"));
+				comment.setWid(aRow.attr("id"));
 				Element userATag = aRow.getElementsByTag("a").get(0);
 				if (userATag != null) {
 					String uid = userATag.attr("href");
@@ -145,8 +137,6 @@ public class CmtCrawler {
 					UserDao.addUser(user);
 					comment.setUid(uid);
 					RelationDao.buildRelation(pubUid, uid);
-					System.out.println("WeiboId : " + weiboId + " ,PubUid : "
-							+ pubUid + " ,CmtUid : " + uid);
 				}
 				Element cmt = aRow.getElementsByClass("ctt").get(0);
 				if (cmt != null) {

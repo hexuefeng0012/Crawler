@@ -36,10 +36,43 @@
         <servlet-name>UserCheck</servlet-name>
         <servlet-class>cn.cem.Servlet.UserCheckServlet</servlet-class>
     </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>SaveExcelServlet</servlet-name>
+    <servlet-class>cn.cem.Servlet.SaveExcelServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>FileDownServlet</servlet-name>
+    <servlet-class>cn.cem.Servlet.FileDownServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>SaveCmtExcelServlet</servlet-name>
+    <servlet-class>cn.cem.Servlet.SaveCmtExcelServlet</servlet-class>
+  </servlet>
+
+
+
     <servlet-mapping>
         <servlet-name>UserCheck</servlet-name>
         <url-pattern>/userCheck</url-pattern>
     </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SaveExcelServlet</servlet-name>
+    <url-pattern>/servlet/SaveExcelServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FileDownServlet</servlet-name>
+    <url-pattern>/servlet/FileDownServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SaveCmtExcelServlet</servlet-name>
+    <url-pattern>/servlet/SaveCmtExcelServlet</url-pattern>
+  </servlet-mapping>
     <filter>
         <filter-name>Online</filter-name>
         <filter-class>cn.cem.Filter.OnlineFilter</filter-class>

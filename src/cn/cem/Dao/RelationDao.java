@@ -33,7 +33,6 @@ public class RelationDao {
 		try
 		{
 			rs1 = dbm.retrieveByStmt(preSql.toString());
-//			System.out.println(preSql.toString());
 			if(null != rs1 && rs1.next())
 			{
 				int num = rs1.getInt(3);
@@ -80,5 +79,16 @@ public class RelationDao {
 			dbm.close();
 		}
 		return state;
+	}
+	
+	public static void deleteAll() 
+	{
+		StringBuffer sql = new StringBuffer();
+
+		sql.append("delete from relation;");
+		DBManager dbm = new DBManager();
+		
+		dbm.deleteByStmt(sql.toString());
+		dbm.close();
 	}
 }

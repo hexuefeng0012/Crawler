@@ -6,31 +6,19 @@ package cn.cem.Bean;
  */
 public class Weibo {
 	private int id;
-	private String divId;
-	private String userId;
-	private String cmtUid;
+	private String wid;
+	private String uid;
+	private String zanNum;
+	private String zfNum;
+	private String cmtNum;
 	private String content;
-	private String oriCmtUrl;
 	private String pubTime;
-	private String lastVisitTime;
+	private String cmtUrl;
+		
 	
-	public String getLastVisitTime() {
-		return lastVisitTime;
-	}
-	public void setLastVisitTime(String lastVisitTime) {
-		this.lastVisitTime = lastVisitTime;
-	}
-	public String getOriCmtUrl() {
-		return oriCmtUrl;
-	}
-	public void setOriCmtUrl(String oriCmtUrl) {
-		this.oriCmtUrl = oriCmtUrl;
-	}
-	public String getPubTime() {
-		return pubTime;
-	}
-	public void setPubTime(String pubTime) {
-		this.pubTime = pubTime;
+	public Weibo() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 	public int getId() {
 		return id;
@@ -38,12 +26,35 @@ public class Weibo {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
-	public String getDivId() {
-		return divId;
+	public String getWid() {
+		return wid;
 	}
-	public void setDivId(String divId) {
-		this.divId = divId;
+	public void setWid(String wid) {
+		this.wid = wid;
+	}
+	public String getUid() {
+		return uid;
+	}
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+	public String getZanNum() {
+		return zanNum;
+	}
+	public void setZanNum(String zanNum) {
+		this.zanNum = zanNum;
+	}
+	public String getZfNum() {
+		return zfNum;
+	}
+	public void setZfNum(String zfNum) {
+		this.zfNum = zfNum;
+	}
+	public String getCmtNum() {
+		return cmtNum;
+	}
+	public void setCmtNum(String cmtNum) {
+		this.cmtNum = cmtNum;
 	}
 	public String getContent() {
 		return content;
@@ -51,17 +62,17 @@ public class Weibo {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getUserId() {
-		return userId;
+	public String getPubTime() {
+		return pubTime;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setPubTime(String pubTime) {
+		this.pubTime = pubTime;
 	}
-	public String getCmtUid() {
-		return cmtUid;
+	public String getCmtUrl() {
+		return cmtUrl;
 	}
-	public void setCmtUid(String cmtUid) {
-		this.cmtUid = cmtUid;
+	public void setCmtUrl(String cmtUrl) {
+		this.cmtUrl = cmtUrl;
 	}
-	
+
 }
