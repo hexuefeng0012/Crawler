@@ -23,7 +23,7 @@ public class GetResultServlet extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
 		String jsonData = null;
 		resp.setContentType("application/json;charset=utf-8");	 
 		int pageNum = Integer.parseInt(req.getParameter("page"));

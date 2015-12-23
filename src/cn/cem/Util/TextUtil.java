@@ -2,6 +2,9 @@ package cn.cem.Util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 /**
  * 文本处理的一些方法
@@ -85,5 +88,14 @@ public class TextUtil {
 			}
 		}
 		return str2;		
+	}
+	
+	public static String GetOnlyNum(String strings) {
+		
+        Pattern pattern = Pattern.compile("[^0-9]");
+        Matcher matcher = pattern.matcher(strings);
+        String all = matcher.replaceAll("");
+		return all;
+		
 	}
 }

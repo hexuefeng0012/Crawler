@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.cem.Crawler.WeiboCrawler;
+import cn.cem.Dao.UserDao;
 import cn.cem.Dao.WeiboDao;
 import cn.cem.Util.DateUtil;
 
@@ -27,6 +28,7 @@ public class CrawlerServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		
 		resp.setContentType("application/json;charset=UTF-8");
 		
 		String keyWord = req.getParameter("keyWord");
@@ -38,11 +40,13 @@ public class CrawlerServlet extends HttpServlet {
 		
 		String starttimeString=DateUtil.formatDate(new Date());
 		WeiboDao.deleteAll();
+		UserDao.deleteAll();
+		
 		try {
 			WeiboCrawler.crawlSearch(keyWord, start, end);
-			String endtimeString=DateUtil.formatDate(new Date());
-			String time="爬取时间"+starttimeString+'-'+endtimeString;
 			
+			String endtimeString=DateUtil.formatDate(new Date());
+			String time=starttimeString+"  -  "+endtimeString;			
 			PrintWriter pw=resp.getWriter();
 			pw.println("{\"jsonData\":\"" + time + "\"}");
 			
