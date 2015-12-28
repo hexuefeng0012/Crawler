@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.cem.Bean.Comment;
 import cn.cem.Bean.Weibo;
+import cn.cem.Dao.CommentDao;
 import cn.cem.Dao.WeiboDao;
 import cn.cem.Util.ExcelCreate;
 
@@ -70,11 +72,37 @@ public class SaveExcelServlet extends HttpServlet {
 		
 		String dir=request.getParameter("dir");
 		String fullFilePath = request.getSession().getServletContext().getRealPath("/save/"+dir);
-		String filename="weiboData.xls";
+		
 		PrintWriter pw = response.getWriter();
+		String keyWord="kobe";
+		String filename=dir+"Data_"+System.currentTimeMillis()+".xls";
+		
+		if (null!=request.getSession().getAttribute("keyWord")) {
+			keyWord=request.getSession().getAttribute("keyWord").toString();
+		}
+		
+		if (dir.equals("comment")) {
+			List<Comment> comments=CommentDao.getComments(keyWord);
+			String[] string ={"用户名","微博地址","微博内容","评论内容"};
+			List<String[]> list = new ArrayList<String[]>(); 
+			list.add(string);
+			
+			for (Comment comment :comments) {
+				String[] strings ={"","","",""};
+				
+				strings[0]=comment.getUid();
+				strings[1]=comment.getWeiboUrl();
+				strings[2]=comment.getWid();
+				strings[3]=comment.getContent();
+				
+				list.add(strings);
+			}
+			
+			ExcelCreate.CreateExcel(list, fullFilePath +'/'+ filename);
+		}
 		
 		if (dir.equals("weibo")) {
-			List<Weibo> weibos=WeiboDao.GetResult();
+			List<Weibo> weibos=WeiboDao.GetResult(keyWord);
 			String[] string ={"用户名","微博地址","发表时间","点赞数","转发数","评论数","发表内容"};
 			List<String[]> list = new ArrayList<String[]>(); 
 			list.add(string);
@@ -94,11 +122,8 @@ public class SaveExcelServlet extends HttpServlet {
 			}
 			
 			ExcelCreate.CreateExcel(list, fullFilePath +'/'+ filename);
-			
-	
-			pw.println("{\"jsonData\":\"" + filename + "\"}");
-
 		}
 		
+			pw.println("{\"jsonData\":\"" + filename + "\"}");
 	}
 }

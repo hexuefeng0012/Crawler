@@ -60,7 +60,7 @@ public class DBManager
     
     
     /**
-     * 获得状态，内部使用
+     * 获得状态
      * @return
      */
     public Statement getStmt()
@@ -117,7 +117,7 @@ public class DBManager
     }
     
     /**
-     * 执行
+     * 进行查询
      * @param sql
      * @return ResultSet
      */
@@ -137,7 +137,7 @@ public class DBManager
     }
     
     /**
-     * insert sql
+     * 进行插入，返回结果集
      * @param aSql
      * @return
      */
@@ -157,7 +157,7 @@ public class DBManager
     }
     
     /**
-     * 返回更新的数量，没用到
+     * 进行插入，返回插入数目
      * @param aSql
      * @return
      */
@@ -177,7 +177,7 @@ public class DBManager
     }
     
     /**
-     * delete sql
+     * 进行删除
      * @param aSql
      * @return
      */
@@ -197,7 +197,7 @@ public class DBManager
     }
     
     /**
-     * 更新sql语句
+     * 更新
      * @param aSql
      * @return
      */
@@ -235,8 +235,7 @@ public class DBManager
 	    		}
 	    		else
 	    		{
-	    			this.mPreStmt = this.getConn().prepareStatement(aSql, 
-										Statement.RETURN_GENERATED_KEYS);
+	    			this.mPreStmt = this.getConn().prepareStatement(aSql, Statement.RETURN_GENERATED_KEYS);
 	    		}
 			} 
 	    	catch (SQLException e) 
@@ -248,7 +247,7 @@ public class DBManager
     }
     
     /**
-     * pre状态下 做
+     * pre状态下执行
      * @param aPreStmt
      * @param aParams
      * @return
@@ -282,7 +281,7 @@ public class DBManager
     }
     
     /**
-     * pre状态下 恢复
+     * pre状态下 进行查询
      * @param aSql
      * @param aParams
      * @return
@@ -307,7 +306,7 @@ public class DBManager
     }
     
     /**
-     * pre状态下,AGK插入
+     * pre状态下插入 返回结果集
      * @param aSql
      * @param aParams
      * @return ResultSet
@@ -332,7 +331,7 @@ public class DBManager
     }
     
     /**
-     * pre状态下 插入
+     * pre状态下 插入，返回数量
      * @param aSql
      * @param aParams
      * @return count

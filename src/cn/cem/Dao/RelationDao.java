@@ -6,10 +6,12 @@ import java.sql.SQLException;
 import cn.cem.Util.DBManager;
 
 /**
+ * 用户1在用户2每次出现了评论，记为1次互动，并不断叠加
  * @author HXF
  *
  */
 public class RelationDao {
+	
 	/**
 	 * 在relation中，新建uid1与uid2的关系
 	 * @param uid1
@@ -17,10 +19,11 @@ public class RelationDao {
 	 * @return
 	 */
 	public static boolean buildRelation(String uid1,String uid2) {
-		boolean state = false;
 		
+		boolean state = false;		
 		StringBuffer preSql = new StringBuffer();
 		StringBuffer sql = new StringBuffer();
+		
 		preSql.append("select * from ").append("relation")
 				.append(" where(")
 				.append("uid1 = '").append(uid1)
@@ -81,6 +84,9 @@ public class RelationDao {
 		return state;
 	}
 	
+	/**
+	 * 删除所有记录
+	 */
 	public static void deleteAll() 
 	{
 		StringBuffer sql = new StringBuffer();

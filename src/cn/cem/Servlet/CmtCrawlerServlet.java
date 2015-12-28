@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.cem.Crawler.CmtCrawler;
-import cn.cem.Dao.CommentDao;
-import cn.cem.Dao.RelationDao;
 import cn.cem.Util.DateUtil;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
@@ -32,11 +30,10 @@ public class CmtCrawlerServlet extends HttpServlet{
 		resp.setContentType("application/json;charset=UTF-8");
 
 		String starttimeString=DateUtil.formatDate(new Date());
-		CommentDao.deleteAll();
-		RelationDao.deleteAll();
-		
+		String keyWord=req.getSession().getAttribute("keyWord").toString();
+
 		try {
-			CmtCrawler.crawlComments();
+			CmtCrawler.crawlComments(keyWord);
 			
 			String endtimeString=DateUtil.formatDate(new Date());
 			String time=starttimeString+"  -  "+endtimeString;			

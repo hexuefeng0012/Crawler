@@ -134,7 +134,7 @@ $('#CrawlerWeibo').on('click',function(){
 		shade : true,
 		opacity : 20,
 		width : 550,
-		height : 320,
+		height : 350,
 		html : $('.choose_class').html(),
 		ConfirmFun : a1,
         CancelFun : a2
@@ -146,13 +146,14 @@ $('#CrawlerWeibo').on('click',function(){
 			var keyword=$("#prompt_body").contents().find("#word").val();
 			var startP=$("#prompt_body").contents().find("#startP").val();
 			var endP=$("#prompt_body").contents().find("#endP").val();
+			var wTime=$("#prompt_body").contents().find("#wTime").val();
 			var time=$("#prompt_body").contents().find("#time").val();
 			$.ajax({
 			   type: "POST",
 			   url:  myurl,	
 			   async: true, 
 			   dataType:"json",
-			   data:{keyWord:keyword,start:startP,end:endP,time:time},
+			   data:{keyWord:keyword,start:startP,end:endP,time:time,wTime:wTime},
 			}).done(function(result){
 				alert("微博爬取成功!\r\n"+result.jsonData);
 				show.CrawComment();
@@ -230,7 +231,7 @@ $('#saveComment').on('click',function(){
 		function a1(){
 			
 			var type=$("input[name='cType']:checked").val();
-			var myurl=basePath+'servlet/SaveCmt'+type+'Servlet';
+			var myurl=basePath+'servlet/Save'+type+'Servlet';
 			$.ajax({
 			   type: "POST",
 			   url:  myurl,	

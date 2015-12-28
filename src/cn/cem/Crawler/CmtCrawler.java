@@ -38,10 +38,9 @@ public class CmtCrawler {
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	public static void crawlComments() throws FailingHttpStatusCodeException,
-			MalformedURLException, IOException {
+	public static void crawlComments(String keyWord) throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 
-		List<Weibo> weiboList = WeiboDao.getWeibos();
+		List<Weibo> weiboList = WeiboDao.getWeibos(keyWord);
 		
 		for (int i = 0; i < weiboList.size(); i++) {
 			Weibo weibo = weiboList.get(i);
@@ -154,7 +153,7 @@ public class CmtCrawler {
 	 */
 	public static void main(String[] args) {
 		try {
-			crawlComments();
+			crawlComments("科比");
 		} catch (FailingHttpStatusCodeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

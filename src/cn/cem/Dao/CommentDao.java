@@ -8,21 +8,30 @@ import java.util.List;
 import cn.cem.Bean.Comment;
 import cn.cem.Util.DBManager;
 
+/**
+ * 关于评论的JDBC执行
+ * @author HXF
+ *
+ */
 public class CommentDao {
 	
 	/**
 	 * 返回微博里面全部评论
 	 * @return
 	 */
-	public static List<Comment> getComments() {
+	public static List<Comment> getComments(String keyWord) {
+		
 		List<Comment>CommentList = new ArrayList<Comment>();
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT `user`.`name`,`weibo`.cmtUrl,weibo.content,`comment`.content FROM `comment` INNER JOIN `user` ON `comment`.uid=`user`.uid INNER JOIN weibo ON `comment`.weiboId=weibo.id;");
+		sql.append("SELECT `user`.`name`,`weibo`.cmtUrl,weibo.content,`comment`.content FROM `comment` INNER JOIN `user` ON `comment`.uid=`user`.uid INNER JOIN weibo ON `comment`.weiboId=weibo.id").append(" WHERE weibo.item=?;");
+		Object[] aParams=new Object[]{keyWord};
+		
 		DBManager dbm = new DBManager();
 		ResultSet rs = null;	
+		
 		try
 		{
-			rs = dbm.retrieveByStmt(sql.toString());
+			rs = dbm.retrieveByPreStmt(sql.toString(),aParams);
 			if(null != rs)
 			{
 				rs.beforeFirst();

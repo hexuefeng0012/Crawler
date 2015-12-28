@@ -14,7 +14,7 @@ public class Weibo {
 	private String content;
 	private String pubTime;
 	private String cmtUrl;
-		
+	private String item;
 	
 	public Weibo() {
 		super();
@@ -73,6 +73,12 @@ public class Weibo {
 	}
 	public void setCmtUrl(String cmtUrl) {
 		this.cmtUrl = cmtUrl;
+	}
+	public String getItem() {
+		return item;
+	}
+	public void setItem(String item) {
+		this.item = item;
 	}
 
 }

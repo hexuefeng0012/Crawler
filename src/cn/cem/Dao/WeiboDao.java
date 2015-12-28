@@ -8,17 +8,30 @@ import java.util.List;
 import cn.cem.Bean.Weibo;
 import cn.cem.Util.DBManager;
 
+/**
+ * 微博相关的JDBC
+ * @author HXF
+ *
+ */
 public class WeiboDao {
 	
-	public static List<Weibo> getWeibos() {
+	/**
+	 * 获取某个主题所有微博
+	 * @param keyword
+	 * @return
+	 */
+	public static List<Weibo> getWeibos(String keyword) {
+		
 		List<Weibo> weiboList = new ArrayList<Weibo>();
 		StringBuffer sql = new StringBuffer();
-		sql.append("select * from ").append("weibo").append(";");
+		sql.append("select * from ").append("weibo").append(" where item=?;");
+		Object[] aParams=new Object[]{keyword};
+		
 		DBManager dbm = new DBManager();
 		ResultSet rs = null;	
 		try
 		{
-			rs = dbm.retrieveByStmt(sql.toString());
+			rs = dbm.retrieveByPreStmt(sql.toString(),aParams);
 			if(null != rs)
 			{
 				rs.beforeFirst();
@@ -27,13 +40,14 @@ public class WeiboDao {
 					Weibo weibo = new Weibo();
 					weibo.setId(rs.getInt(1));
 					weibo.setWid(rs.getString(2));
-					weibo.setUid(rs.getString(3));
-					weibo.setZanNum(rs.getString(4));
-					weibo.setZfNum(rs.getString(5));
-					weibo.setCmtNum(rs.getString(6));
-					weibo.setContent(rs.getString(7));
-					weibo.setPubTime(rs.getString(8));
-					weibo.setCmtUrl(rs.getString(9));
+					weibo.setItem(rs.getString(3));
+					weibo.setUid(rs.getString(4));
+					weibo.setZanNum(rs.getString(5));
+					weibo.setZfNum(rs.getString(6));
+					weibo.setCmtNum(rs.getString(7));
+					weibo.setContent(rs.getString(8));
+					weibo.setPubTime(rs.getString(9));
+					weibo.setCmtUrl(rs.getString(10));
 					weiboList.add(weibo);
 				}
 			}
@@ -51,13 +65,20 @@ public class WeiboDao {
 		return weiboList;
 	}
 	
-	public static int addWeibo(Weibo weibo) {
-		int agk = 0;
+	/**
+	 * 新增用户记录
+	 * @param weibo
+	 * @param keyword
+	 * @return
+	 */
+	public static int addWeibo(Weibo weibo,String keyword) {
 		
+		int agk = 0;		
 		StringBuffer sql = new StringBuffer();
 		sql.append("insert into ").append("weibo")
 			.append(" (").append("wid")
 			.append(", ").append("uid")
+			.append(", ").append("item")
 			.append(", ").append("zanNum")
 			.append(", ").append("zfNum")
 			.append(", ").append("cmtNum")
@@ -66,6 +87,7 @@ public class WeiboDao {
 			.append(", ").append("cmtUrl")
 			.append(") values('").append(weibo.getWid())
 			.append("', '").append(weibo.getUid())
+			.append("', '").append(keyword)
 			.append("', '").append(weibo.getZanNum())
 			.append("', '").append(weibo.getZfNum())
 			.append("', '").append(weibo.getCmtNum())
@@ -75,7 +97,7 @@ public class WeiboDao {
 			.append("');");
 		DBManager dbm = new DBManager();
 		ResultSet rs = null;
-		dbm.retrieveByStmt("SET NAMES utf8mb4;" );
+//		dbm.retrieveByStmt("SET NAMES utf8mb4;" );
 		rs = dbm.insertByStmtAGK(sql.toString());
 		try {
 			if((null!=rs) && rs.next())
@@ -94,6 +116,12 @@ public class WeiboDao {
 		return agk;
 	}
 	
+	/**
+	 * 每次变动记录，更新一次访问时间
+	 * @param weiboId
+	 * @param nowTime
+	 * @return
+	 */
 	public static boolean updateVisitTime(int weiboId,String nowTime) 
 	{
 		boolean state = false;
@@ -112,6 +140,9 @@ public class WeiboDao {
 		return state;
 	}
 	
+	/**
+	 * 删除所有微博
+	 */
 	public static void deleteAll() 
 	{
 		StringBuffer sql = new StringBuffer();
@@ -123,15 +154,24 @@ public class WeiboDao {
 		dbm.close();
 	}
 	
-	public static List<Weibo> GetResult() {
+	/**
+	 * 获取前台展示格式的微博
+	 * @param keyWord
+	 * @return
+	 */
+	public static List<Weibo> GetResult(String keyWord) {
+		
 		List<Weibo> weiboList = new ArrayList<Weibo>();
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT `user`.`name`,weibo.cmtUrl,weibo.pubTime,weibo.content,weibo.zanNum,weibo.zfNum,weibo.cmtNum FROM `user` INNER JOIN weibo WHERE weibo.uid=`user`.uid;");
+		sql.append("SELECT `user`.`name`,weibo.cmtUrl,weibo.pubTime,weibo.content,weibo.zanNum,weibo.zfNum,weibo.cmtNum FROM weibo INNER JOIN `user` ON weibo.uid=`user`.uid WHERE weibo.item=?;");
+		Object[] aParams=new Object[]{keyWord};
+		
 		DBManager dbm = new DBManager();
 		ResultSet rs = null;	
+		
 		try
 		{
-			rs = dbm.retrieveByStmt(sql.toString());
+			rs = dbm.retrieveByPreStmt(sql.toString(),aParams);
 			if(null != rs)
 			{
 				rs.beforeFirst();

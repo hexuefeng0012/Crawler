@@ -6,10 +6,21 @@ import java.sql.SQLException;
 import cn.cem.Bean.User;
 import cn.cem.Util.DBManager;
 
+/**
+ * 用户相关的JDBC
+ * @author HXF
+ *
+ */
 public class UserDao {
+	
+	/**
+	 * 新增1条用户记录
+	 * @param user
+	 * @return
+	 */
 	public static boolean addUser(User user) {
-		boolean state = false;
 		
+		boolean state = false;
 		StringBuffer sql = new StringBuffer();
 		sql.append("insert into ").append("user")
 			.append(" (").append("uid")
@@ -36,6 +47,9 @@ public class UserDao {
 		return state;
 	}
 	
+	/**
+	 * 删除所有记录
+	 */
 	public static void deleteAll() 
 	{
 		StringBuffer sql = new StringBuffer();

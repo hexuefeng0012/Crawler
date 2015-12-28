@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.cem.Util.TextUtil;
+
 public class FileDownServlet extends HttpServlet {
 
 	/**
@@ -45,7 +47,7 @@ public class FileDownServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String filename=request.getParameter("filename");
+		String filename=TextUtil.httpToUTF8(request.getParameter("filename"));
 		String dir=request.getParameter("dir");
         response.setContentType(getServletContext().getMimeType(filename));  
         response.setHeader("contentType", "text/html; charset=utf-8");
@@ -81,27 +83,6 @@ public class FileDownServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String filename=request.getParameter("filename");
-        response.setContentType(getServletContext().getMimeType(filename));  
-        response.setHeader("contentType", "text/html; charset=utf-8");
-        response.setHeader("Content-Disposition","attachment;filename="+filename);  
-		
-    	String fullFileName = request.getSession().getServletContext().getRealPath("/save/weibo/"+filename);
-        InputStream in = new FileInputStream(fullFileName);  
-        OutputStream out = response.getOutputStream();
-        
-        //写文件  
-        int b;
-        try {
-        	while((b=in.read())!= -1)  
-            {  
-                out.write(b);
-            }  
-            in.close();  
-            out.close(); 
-		} catch (Exception e) {
-			
-		}
 	}
 
 	/**

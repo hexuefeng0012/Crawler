@@ -46,7 +46,7 @@ public class WeiboCrawler {
 		for (int i = pageStart; i <= pageEnd; i++) {
 			HtmlPage page = client.getPage(searchString + i);
 			System.out.println("page:" + i);
-			collectInfo(page);
+			collectInfo(page,keyword);
 		}
 	}
 	/**
@@ -56,7 +56,7 @@ public class WeiboCrawler {
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	private static void collectInfo(HtmlPage page)
+	private static void collectInfo(HtmlPage page,String keyWord)
 			throws FailingHttpStatusCodeException, MalformedURLException,
 			IOException {
 
@@ -137,7 +137,7 @@ public class WeiboCrawler {
 					weibo.setPubTime(pubTime);
 				}
 
-				WeiboDao.addWeibo(weibo);
+				WeiboDao.addWeibo(weibo,keyWord);
 			}
 		}
 	}

@@ -4,7 +4,9 @@
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
+	
 %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -57,7 +59,8 @@
 	    	<li>主题词汇：&nbsp;<input type="text" id="word" placeholder="请输入要抓取的主题词汇" style="width: 300px;"/></li> 
 			<li>开始页数：&nbsp;<input type="text" id="startP" placeholder="抓取的开始页数" style="width: 300px;"/></li>
 			<li>结束页数：&nbsp;<input type="text" id="endP" placeholder="抓取的结束页数，最多100页" style="width: 300px;"/></li>
-			<li>追踪时间：&nbsp;<input type="text" id="time" placeholder="进行追踪的时间，单位（小时）" style="width: 300px;"/></li>  
+			<li>主题追踪：&nbsp;<input type="text" id="wTime" placeholder="主题追踪的时间设置，单位（天）" style="width: 300px;"/></li>  
+			<li>微博追踪：&nbsp;<input type="text" id="time" placeholder="微博追踪的时间设置，单位（小时）" style="width: 300px;"/></li>  
 	    </ul>	    
 	</div>
 	 
