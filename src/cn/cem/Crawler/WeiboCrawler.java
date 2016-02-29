@@ -49,6 +49,7 @@ public class WeiboCrawler {
 			collectInfo(page,keyword);
 		}
 	}
+	
 	/**
 	 * 在1页中进行内容抓取
 	 * @param page
