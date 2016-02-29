@@ -69,7 +69,7 @@ public class WeiboCrawler {
 		String aString=page.asXml();
 		Document pagedoc = Jsoup.parse(aString);
 
-//		获取整页评论的信息，并进行进一步细分
+//		获取整页评论的信息，并进行进一步细分。
 		Elements rows = pagedoc.getElementsByClass("c");
 
 		if (rows != null && rows.size() > 0) {
